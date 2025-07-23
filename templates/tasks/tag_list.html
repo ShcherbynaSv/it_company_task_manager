@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Tags List</h1>
+  {% if tag_list %}
+    <ul>
+      {% for tag in tag_list %}
+        <li>
+          <a href="{% url 'tasks:task-list' %}?tags={{ tag.id }}">
+          {{ tag.name }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>There are no tags</p>
+  {% endif %}
+{% endblock %}

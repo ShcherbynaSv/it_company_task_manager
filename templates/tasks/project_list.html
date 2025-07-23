@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Projects List</h1>
+  {% if project_list %}
+    <ul>
+      {% for project in project_list %}
+        <li>
+          <a href="#"></a>
+          {{ project.name }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>There are no projects</p>
+  {% endif %}
+{% endblock %}

@@ -1,10 +1,10 @@
 <ul class="sidebar-nav">
-  <li><a href="tasks:index">Home</a></li>
-  <li><a href="#">Tags</a></li>
-  <li><a href="#">Tasks</a></li>
-  <li><a href="#">Task types</a></li>
-  <li><a href="#">Teams</a></li>
-  <li><a href="#">Projects</a></li>
-  <li><a href="#">Positions</a></li>
-  <li><a href="#">Workers</a></li>
+  <li><a href="{% url 'tasks:index' %}">Home</a></li>
+  <li><a href="{% url 'tasks:tag-list' %}">Tags</a></li>
+  <li><a href="{% url 'tasks:task-list' %}">Tasks</a></li>
+  <li><a href="{% url 'tasks:task-type-list' %}">Task types</a></li>
+  <li><a href="{% url 'tasks:team-list' %}">Teams</a></li>
+  <li><a href="{% url 'tasks:project-list' %}">Projects</a></li>
+  <li><a href="{% url 'tasks:position-list' %}">Positions</a></li>
+  <li><a href="{% url 'tasks:worker-list' %}">Workers</a></li>
 </ul>
