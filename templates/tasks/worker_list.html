@@ -2,6 +2,12 @@
 
 {% block content %}
   <h1>Workers List</h1>
+
+  {% if selected_position %}
+    <p>Filtered by position: <strong>{{ selected_position.name }}</strong></p>
+    <p><a href="{% url 'tasks:worker-list' %}">Clear filter</a></p>
+  {% endif %}
+
   {% if worker_list %}
     <ul>
       {% for worker in worker_list %}
