@@ -12,8 +12,9 @@
     <ul>
       {% for worker in worker_list %}
         <li>
-          <a href="#"></a>
+          <a href="{{ worker.get_absolute_url }}">
           {{ worker.first_name }} {{ worker.last_name }}
+          </a>
         </li>
       {% endfor %}
     </ul>

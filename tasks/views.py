@@ -61,6 +61,19 @@ class WorkerListView(generic.ListView):
         return context
 
 
+class WorkerDetailView(generic.DetailView):
+    model = Worker
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        worker = self.get_object()
+
+        context["completed_tasks"] = worker.tasks.filter(is_completed=True)
+        context["tasks_in_progress"] = worker.tasks.filter(is_completed=False)
+
+        return context
+
+
 class TaskListView(generic.ListView):
     model = Task
 
@@ -90,3 +103,7 @@ class TaskListView(generic.ListView):
         context["selected_tag"] = self.tag
         context["selected_task_type"] = self.task_type
         return context
+
+
+class TaskDetailView(generic.DetailView):
+    model = Task

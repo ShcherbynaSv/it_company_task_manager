@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.urls import reverse
 
 from it_company_task_manager import settings
 
@@ -82,6 +83,9 @@ class Worker(AbstractUser):
     class Meta:
         ordering = ("username",)
 
+    def get_absolute_url(self):
+        return reverse("tasks:worker-detail", args=[str(self.id)])
+
 
 class Task(models.Model):
     PRIORITY_CHOICES = [
@@ -126,3 +130,6 @@ class Task(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse("tasks:task-detail", args=[str(self.id)])
