@@ -6,8 +6,9 @@
     <ul>
       {% for project in project_list %}
         <li>
-          <a href="#"></a>
-          {{ project.name }}
+          <a href="{{ project.get_absolute_url }}">
+            {{ project.name }}
+          </a>
         </li>
       {% endfor %}
     </ul>

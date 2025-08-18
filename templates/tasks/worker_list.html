@@ -8,6 +8,11 @@
     <p><a href="{% url 'tasks:worker-list' %}">Clear filter</a></p>
   {% endif %}
 
+  {% if selected_team %}
+    <p>Filtered by team: <strong>{{ selected_team.name }}</strong></p>
+    <p><a href="{% url 'tasks:worker-list' %}">Clear filter</a></p>
+  {% endif %}
+
   {% if worker_list %}
     <ul>
       {% for worker in worker_list %}

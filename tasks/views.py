@@ -40,6 +40,13 @@ class ProjectListView(generic.ListView):
     model = Project
 
 
+class ProjectDetailView(generic.DetailView):
+    model = Project
+
+    def get_queryset(self):
+        return super().get_queryset().select_related("team")
+
+
 class WorkerListView(generic.ListView):
     model = Worker
 
@@ -53,11 +60,22 @@ class WorkerListView(generic.ListView):
                 self.position = Position.objects.get(id=position_id)
             except Position.DoesNotExist:
                 self.position = None
+
+        self.team = None
+        team_id = self.request.GET.get("team")
+        if team_id:
+            queryset = queryset.filter(team_id=team_id)
+            try:
+                self.team = Team.objects.get(id=team_id)
+            except Team.DoesNotExist:
+                self.team = None
+
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["selected_position"] = self.position
+        context["selected_team"] = self.team
         return context
 
 
@@ -66,12 +84,23 @@ class WorkerDetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        worker = self.get_object()
+        worker = self.object
 
-        context["completed_tasks"] = worker.tasks.filter(is_completed=True)
-        context["tasks_in_progress"] = worker.tasks.filter(is_completed=False)
+        all_tasks = list(worker.tasks.all())
+        context["completed_tasks"] = [task for task in all_tasks
+                                      if task.is_completed]
+        context["tasks_in_progress"] = [task for task in all_tasks
+                                        if not task.is_completed]
 
         return context
+
+    def get_queryset(self):
+        return (
+            super()
+            .get_queryset()
+            .select_related("position", "team")
+            .prefetch_related("tasks")
+        )
 
 
 class TaskListView(generic.ListView):
@@ -107,3 +136,10 @@ class TaskListView(generic.ListView):
 
 class TaskDetailView(generic.DetailView):
     model = Task
+
+    def get_queryset(self):
+        return (
+            super().get_queryset()
+            .select_related("task_type", "project")
+            .prefetch_related("assignees", "tags")
+        )
