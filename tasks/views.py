@@ -20,24 +20,29 @@ def index(request: HttpRequest) -> HttpResponse:
 
 class PositionListView(generic.ListView):
     model = Position
+    paginate_by = 10
 
 
 class TeamListView(generic.ListView):
     model = Team
+    paginate_by = 10
 
 
 class TaskTypeListView(generic.ListView):
     model = TaskType
     template_name = "tasks/task_type_list.html"
     context_object_name = "task_type_list"
+    paginate_by = 10
 
 
 class TagListView(generic.ListView):
     model = Tag
+    paginate_by = 10
 
 
 class ProjectListView(generic.ListView):
     model = Project
+    paginate_by = 10
 
 
 class ProjectDetailView(generic.DetailView):
@@ -49,6 +54,7 @@ class ProjectDetailView(generic.DetailView):
 
 class WorkerListView(generic.ListView):
     model = Worker
+    paginate_by = 10
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -105,6 +111,7 @@ class WorkerDetailView(generic.DetailView):
 
 class TaskListView(generic.ListView):
     model = Task
+    paginate_by = 10
 
     def get_queryset(self):
         queryset = super().get_queryset()
