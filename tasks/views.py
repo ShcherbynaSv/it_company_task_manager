@@ -1,5 +1,7 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views import generic
 
 from .models import Tag, Task, TaskType, Team, Project, Position, Worker
@@ -21,6 +23,26 @@ def index(request: HttpRequest) -> HttpResponse:
 class PositionListView(generic.ListView):
     model = Position
     paginate_by = 10
+
+
+class PositionCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Position
+    fields = "__all__"
+    template_name = "tasks/position_form.html"
+    success_url = reverse_lazy("tasks:position-list")
+
+
+class PositionUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Position
+    fields = "__all__"
+    template_name = "tasks/position_form.html"
+    success_url = reverse_lazy("tasks:position-list")
+
+
+class PositionDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Position
+    success_url = reverse_lazy("tasks:position-list")
+    template_name = "tasks/confirm_delete_position.html"
 
 
 class TeamListView(generic.ListView):

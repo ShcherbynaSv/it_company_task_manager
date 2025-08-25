@@ -1,17 +1,30 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Positions List</h1>
+  <h1>Positions List<a style="float: right;" class="btn btn-primary" href="{% url 'tasks:position-create' %}"><b>+</b></a></h1>
   {% if position_list %}
-    <ul>
+    <table class="table">
+      <tr>
+        <th>Position name</th>
+        <th>UPDATE</th>
+        <th>DELETE</th>
+      </tr>
       {% for position in position_list %}
-        <li>
-          <a href="{% url 'tasks:worker-list' %}?position={{ position.id }}">
-          {{ position.name }}
-        </a>
-        </li>
+        <tr>
+          <td>
+            <a href="{% url 'tasks:worker-list' %}?position={{ position.id }}">
+              {{ position.name }}
+            </a>
+          </td>
+          <td>
+            <a href="{% url 'tasks:position-update' position.id %}">UPDATE</a>
+          </td>
+          <td>
+            <a href="{% url 'tasks:position-delete' position.id %}">DELETE</a>
+          </td>
+        </tr>
       {% endfor %}
-    </ul>
+    </table>
   {% else %}
     <p>There are no positions</p>
   {% endif %}
