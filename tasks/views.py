@@ -102,6 +102,26 @@ class TagListView(generic.ListView):
     paginate_by = 10
 
 
+class TagCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Tag
+    fields = "__all__"
+    template_name = "tasks/tag_form.html"
+    success_url = reverse_lazy("tasks:tag-list")
+
+
+class TagUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Tag
+    fields = "__all__"
+    template_name = "tasks/tag_form.html"
+    success_url = reverse_lazy("tasks:tag-list")
+
+
+class TagDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Tag
+    template_name = "tasks/confirm_delete_tag.html"
+    success_url = reverse_lazy("tasks:tag-list")
+
+
 class ProjectListView(generic.ListView):
     model = Project
     paginate_by = 10

@@ -1,17 +1,33 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Tags List</h1>
+  <h1>
+    Tags List
+    <a style="float: right;" class="btn btn-primary" href="{% url 'tasks:tag-create' %}"><b>+</b></a>
+  </h1>
   {% if tag_list %}
-    <ul>
+    <table class="table">
+      <tr>
+        <th>Tag name</th>
+        <th>UPDATE</th>
+        <th>DELETE</th>
+      </tr>
       {% for tag in tag_list %}
-        <li>
-          <a href="{% url 'tasks:task-list' %}?tags={{ tag.id }}">
-          {{ tag.name }}
-          </a>
-        </li>
+        <tr>
+          <td>
+            <a href="{% url 'tasks:task-list' %}?tags={{ tag.id }}">
+              {{ tag.name }}
+            </a>
+          </td>
+          <td>
+            <a href="{% url 'tasks:tag-update' tag.id %}">UPDATE</a>
+          </td>
+          <td>
+            <a href="{% url 'tasks:tag-delete' tag.id %}">DELETE</a>
+          </td>
+        </tr>
       {% endfor %}
-    </ul>
+    </table>
   {% else %}
     <p>There are no tags</p>
   {% endif %}
