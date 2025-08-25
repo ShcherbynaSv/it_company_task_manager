@@ -7,6 +7,9 @@ from tasks.views import (
     PositionUpdateView,
     PositionDeleteView,
     TeamListView,
+    TeamCreateView,
+    TeamUpdateView,
+    TeamDeleteView,
     TaskTypeListView,
     TagListView,
     ProjectListView,
@@ -36,6 +39,17 @@ urlpatterns = [
         name="position-delete"
     ),
     path("teams/", TeamListView.as_view(), name="team-list"),
+    path("teams/create/", TeamCreateView.as_view(), name="team-create"),
+    path(
+        "teams/<int:pk>/update/",
+        TeamUpdateView.as_view(),
+        name="team-update"
+    ),
+    path(
+        "teams/<int:pk>/delete/",
+        TeamDeleteView.as_view(),
+        name="team-delete"
+    ),
     path("task-types/", TaskTypeListView.as_view(), name="task-type-list"),
     path("tags/", TagListView.as_view(), name="tag-list"),
     path("projects/", ProjectListView.as_view(), name="project-list"),

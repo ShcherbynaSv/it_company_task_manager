@@ -50,6 +50,26 @@ class TeamListView(generic.ListView):
     paginate_by = 10
 
 
+class TeamCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Team
+    fields = "__all__"
+    template_name = "tasks/team_form.html"
+    success_url = reverse_lazy("tasks:team-list")
+
+
+class TeamUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Team
+    fields = "__all__"
+    template_name = "tasks/team_form.html"
+    success_url = reverse_lazy("tasks:team-list")
+
+
+class TeamDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Team
+    template_name = "tasks/confirm_delete_team.html"
+    success_url = reverse_lazy("tasks:team-list")
+
+
 class TaskTypeListView(generic.ListView):
     model = TaskType
     template_name = "tasks/task_type_list.html"
