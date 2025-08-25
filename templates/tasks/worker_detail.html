@@ -2,6 +2,8 @@
 
 {% block content %}
   <h1>{{ object.first_name }} {{ object.last_name }}</h1>
+  <a class="btn btn-secondary" href="{% url 'tasks:worker-update' object.id %}">Edit worker information</a>
+  <a class="btn btn-danger" href="{% url 'tasks:worker-delete' object.id %}">Delete worker</a>
   <hr>
   {% if object.email %}
     <p><strong>E-mail: </strong> {{ object.email }}</p>

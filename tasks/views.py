@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 
+from .forms import WorkerCreationForm, WorkerUpdateForm
 from .models import Tag, Task, TaskType, Team, Project, Position, Worker
 
 
@@ -192,6 +193,13 @@ class WorkerListView(generic.ListView):
         return context
 
 
+class WorkerCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Worker
+    form_class = WorkerCreationForm
+    template_name = "tasks/worker_form.html"
+    success_url = reverse_lazy("tasks:worker-list")
+
+
 class WorkerDetailView(generic.DetailView):
     model = Worker
 
@@ -214,6 +222,24 @@ class WorkerDetailView(generic.DetailView):
             .select_related("position", "team")
             .prefetch_related("tasks")
         )
+
+
+class WorkerUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Worker
+    form_class = WorkerUpdateForm
+    template_name = template_name = "tasks/worker_form.html"
+
+    def get_success_url(self):
+        return reverse_lazy(
+            "tasks:worker-detail",
+            kwargs={"pk": self.object.pk}
+        )
+
+
+class WorkerDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Worker
+    template_name = "tasks/confirm_delete_worker.html"
+    success_url = reverse_lazy("tasks:worker-list")
 
 
 class TaskListView(generic.ListView):
