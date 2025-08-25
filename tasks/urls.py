@@ -19,7 +19,10 @@ from tasks.views import (
     TagUpdateView,
     TagDeleteView,
     ProjectListView,
+    ProjectCreateView,
     ProjectDetailView,
+    ProjectUpdateView,
+    ProjectDeleteView,
     WorkerListView,
     WorkerDetailView,
     TaskListView,
@@ -78,9 +81,24 @@ urlpatterns = [
     path("tags/<int:pk>/delete/", TagDeleteView.as_view(), name="tag-delete"),
     path("projects/", ProjectListView.as_view(), name="project-list"),
     path(
+        "projects/create/",
+        ProjectCreateView.as_view(),
+        name="project-create"
+    ),
+    path(
         "projects/<int:pk>/",
         ProjectDetailView.as_view(),
         name="project-detail"
+    ),
+    path(
+        "projects/<int:pk>/update/",
+        ProjectUpdateView.as_view(),
+        name="project-update"
+    ),
+    path(
+        "projects/<int:pk>/delete/",
+        ProjectDeleteView.as_view(),
+        name="project-delete"
     ),
     path("workers/", WorkerListView.as_view(), name="worker-list"),
     path(

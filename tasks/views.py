@@ -127,11 +127,36 @@ class ProjectListView(generic.ListView):
     paginate_by = 10
 
 
+class ProjectCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Project
+    fields = "__all__"
+    template_name = "tasks/project_form.html"
+    success_url = reverse_lazy("tasks:project-list")
+
+
 class ProjectDetailView(generic.DetailView):
     model = Project
 
     def get_queryset(self):
         return super().get_queryset().select_related("team")
+
+
+class ProjectUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Project
+    fields = "__all__"
+    template_name = "tasks/project_form.html"
+
+    def get_success_url(self):
+        return reverse_lazy(
+            "tasks:project-detail",
+            kwargs={"pk": self.object.pk}
+        )
+
+
+class ProjectDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Project
+    template_name = "tasks/confirm_delete_project.html"
+    success_url = reverse_lazy("tasks:project-list")
 
 
 class WorkerListView(generic.ListView):

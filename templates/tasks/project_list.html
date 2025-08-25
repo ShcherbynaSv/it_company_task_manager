@@ -1,7 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Projects List</h1>
+  <h1>
+    Projects List
+    <a style="float: right;" class="btn btn-primary" href="{% url 'tasks:project-create' %}"><b>+</b></a>
+  </h1>
   {% if project_list %}
     <ul>
       {% for project in project_list %}

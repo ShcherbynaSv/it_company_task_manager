@@ -2,6 +2,8 @@
 
 {% block content %}
   <h1>{{ object.name }}</h1>
+  <a class="btn btn-secondary" href="{% url 'tasks:project-update' object.id %}">Edit project</a>
+  <a class="btn btn-danger" href="{% url 'tasks:project-delete' object.id %}">Delete project</a>
   <hr>
   <p><strong>Creation date: </strong> {{ object.created_at }}</p>
   <p><strong>Team: </strong><a href="{% url 'tasks:worker-list' %}?team={{ object.team.id }}">{{ object.team }}</a></p>
