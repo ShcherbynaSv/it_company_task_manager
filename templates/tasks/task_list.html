@@ -1,7 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Tasks List</h1>
+  <h1>
+    Tasks List
+    <a style="float: right;" class="btn btn-primary" href="{% url 'tasks:task-create' %}"><b>+</b></a>
+  </h1>
 
   {% if selected_tag %}
     <p>Filtered by tag: <strong>{{ selected_tag.name }}</strong></p>

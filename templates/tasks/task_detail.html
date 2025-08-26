@@ -1,12 +1,16 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>{{ object.name }}</h1>
+  <h1>
+    {{ object.name }}
+    <a class="btn btn-secondary" href="{% url 'tasks:task-update' object.id %}">Edit task</a>
+    <a class="btn btn-danger" href="{% url 'tasks:task-delete' object.id %}">Delete task</a>
+  </h1>
   <hr>
   <p><strong>Creation date: </strong> {{ object.created_at }}</p>
   <p><strong>Deadline: </strong> {{ object.deadline }}</p>
   <p><strong>Is completed: </strong> {{ object.is_completed }}</p>
-  <p><strong>Priority: </strong> {{ object.created_at }}</p>
+  <p><strong>Priority: </strong> {{ object.priority }}</p>
   <p><strong>Task type: </strong> {{ object.task_type }}</p>
   <p><strong>Project: </strong> {{ object.project }}</p>
   <p><strong>Description:</strong></p>
