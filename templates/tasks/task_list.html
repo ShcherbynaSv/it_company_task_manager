@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load crispy_forms_filters %}
 
 {% block content %}
   <h1>
@@ -8,13 +9,34 @@
 
   {% if selected_tag %}
     <p>Filtered by tag: <strong>{{ selected_tag.name }}</strong></p>
-    <p><a href="{% url 'tasks:task-list' %}">Clear filter</a></p>
+    <p>
+      <a href="{% url 'tasks:task-list' %}?name={{ request.GET.name }}">
+        Clear filter
+      </a>
+    </p>
   {% endif %}
 
   {% if selected_task_type %}
     <p>Filtered by task type: <strong>{{ selected_task_type.name }}</strong></p>
-    <p><a href="{% url 'tasks:task-list' %}">Clear filter</a></p>
+    <p>
+      <a href="{% url 'tasks:task-list' %}?name={{ request.GET.name }}">
+        Clear filter
+      </a>
+    </p>
   {% endif %}
+
+  <form class="form-inline" method="get" action="">
+    {% if selected_tag %}
+      <input type="hidden" name="tags" value="{{ selected_tag.id }}">
+    {% endif %}
+    {% if selected_task_type %}
+      <input type="hidden" name="task_type" value="{{ selected_task_type.id }}">
+    {% endif %}
+
+    {{ search_form|crispy }}
+    <input class="btn btn-secondary" type="submit" value="🔍">
+</form>
+  <br>
 
   {% if task_list %}
     <ul>

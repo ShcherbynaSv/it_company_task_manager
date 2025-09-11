@@ -48,3 +48,70 @@ class TaskForm(forms.ModelForm):
             "assignees": forms.CheckboxSelectMultiple(),
             "tags": forms.CheckboxSelectMultiple(),
         }
+
+
+class PositionSearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={"placeholder": "Search by position name"}
+        )
+    )
+
+
+class TeamSearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Search by team name"})
+    )
+
+
+class TaskTypeSearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={"placeholder": "Search by task type name"}
+        )
+    )
+
+
+class TagSearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Search by tag name"})
+    )
+
+
+class ProjectSearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Search by project name"})
+    )
+
+
+class WorkerSearchForm(forms.Form):
+    full_name = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Search by full name"})
+    )
+
+
+class TaskSearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Search by task name"})
+    )

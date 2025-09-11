@@ -1,20 +1,23 @@
-<ul class="sidebar-nav">
+<ul class="sidebar-nav list-group">
   {% if user.is_authenticated %}
-    <li><strong>User: </strong>{{ user.username }}</li>
-    <form action="{% url 'logout' %}" method="post">
+    <li class="list-group-item"><strong>User: </strong>{{ user.username }}</li>
+    <li class="list-group-item">
+      <form action="{% url 'logout' %}" method="post">
       {% csrf_token %}
       <button class="btn btn-primary" type="submit">Logout</button>
     </form>
+    </li>
+
   {% else %}
-    <li><a href="{% url 'login' %}">Login</a></li>
+    <li class="list-group-item"><a href="{% url 'login' %}">Login</a></li>
   {% endif %}
   <br>
-  <li><a href="{% url 'tasks:index' %}">Home</a></li>
-  <li><a href="{% url 'tasks:tag-list' %}">Tags</a></li>
-  <li><a href="{% url 'tasks:task-list' %}">Tasks</a></li>
-  <li><a href="{% url 'tasks:task-type-list' %}">Task types</a></li>
-  <li><a href="{% url 'tasks:team-list' %}">Teams</a></li>
-  <li><a href="{% url 'tasks:project-list' %}">Projects</a></li>
-  <li><a href="{% url 'tasks:position-list' %}">Positions</a></li>
-  <li><a href="{% url 'tasks:worker-list' %}">Workers</a></li>
+  <li class="list-group-item"><a href="{% url 'tasks:index' %}">Home</a></li>
+  <li class="list-group-item"><a href="{% url 'tasks:tag-list' %}">Tags</a></li>
+  <li class="list-group-item"><a href="{% url 'tasks:task-list' %}">Tasks</a></li>
+  <li class="list-group-item"><a href="{% url 'tasks:task-type-list' %}">Task types</a></li>
+  <li class="list-group-item"><a href="{% url 'tasks:team-list' %}">Teams</a></li>
+  <li class="list-group-item"><a href="{% url 'tasks:project-list' %}">Projects</a></li>
+  <li class="list-group-item"><a href="{% url 'tasks:position-list' %}">Positions</a></li>
+  <li class="list-group-item"><a href="{% url 'tasks:worker-list' %}">Workers</a></li>
 </ul>

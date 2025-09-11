@@ -4,7 +4,18 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 
-from .forms import WorkerCreationForm, WorkerUpdateForm, TaskForm
+from .forms import (
+    WorkerCreationForm,
+    WorkerUpdateForm,
+    TaskForm,
+    TagSearchForm,
+    PositionSearchForm,
+    TeamSearchForm,
+    TaskTypeSearchForm,
+    ProjectSearchForm,
+    WorkerSearchForm,
+    TaskSearchForm
+)
 from .models import Tag, Task, TaskType, Team, Project, Position, Worker
 
 
@@ -24,6 +35,19 @@ def index(request: HttpRequest) -> HttpResponse:
 class PositionListView(generic.ListView):
     model = Position
     paginate_by = 10
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(PositionListView, self).get_context_data(**kwargs)
+        name = self.request.GET.get("name", "")
+        context["search_form"] = PositionSearchForm(initial={"name": name})
+        return context
+
+    def get_queryset(self):
+        queryset = Position.objects.all()
+        form = PositionSearchForm(self.request.GET)
+        if form.is_valid():
+            return queryset.filter(name__icontains=form.cleaned_data["name"])
+        return queryset
 
 
 class PositionCreateView(LoginRequiredMixin, generic.CreateView):
@@ -49,6 +73,19 @@ class PositionDeleteView(LoginRequiredMixin, generic.DeleteView):
 class TeamListView(generic.ListView):
     model = Team
     paginate_by = 10
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(TeamListView, self).get_context_data(**kwargs)
+        name = self.request.GET.get("name", "")
+        context["search_form"] = TeamSearchForm(initial={"name": name})
+        return context
+
+    def get_queryset(self):
+        queryset = Team.objects.all()
+        form = TeamSearchForm(self.request.GET)
+        if form.is_valid():
+            return queryset.filter(name__icontains=form.cleaned_data["name"])
+        return queryset
 
 
 class TeamCreateView(LoginRequiredMixin, generic.CreateView):
@@ -77,6 +114,19 @@ class TaskTypeListView(generic.ListView):
     context_object_name = "task_type_list"
     paginate_by = 10
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(TaskTypeListView, self).get_context_data(**kwargs)
+        name = self.request.GET.get("name", "")
+        context["search_form"] = TaskTypeSearchForm(initial={"name": name})
+        return context
+
+    def get_queryset(self):
+        queryset = TaskType.objects.all()
+        form = TaskTypeSearchForm(self.request.GET)
+        if form.is_valid():
+            return queryset.filter(name__icontains=form.cleaned_data["name"])
+        return queryset
+
 
 class TaskTypeCreateView(LoginRequiredMixin, generic.CreateView):
     model = TaskType
@@ -102,6 +152,19 @@ class TagListView(generic.ListView):
     model = Tag
     paginate_by = 10
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(TagListView, self).get_context_data(**kwargs)
+        name = self.request.GET.get("name", "")
+        context["search_form"] = TagSearchForm(initial={"name": name})
+        return context
+
+    def get_queryset(self):
+        queryset = Tag.objects.all()
+        form = TagSearchForm(self.request.GET)
+        if form.is_valid():
+            return queryset.filter(name__icontains=form.cleaned_data["name"])
+        return queryset
+
 
 class TagCreateView(LoginRequiredMixin, generic.CreateView):
     model = Tag
@@ -126,6 +189,19 @@ class TagDeleteView(LoginRequiredMixin, generic.DeleteView):
 class ProjectListView(generic.ListView):
     model = Project
     paginate_by = 10
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ProjectListView, self).get_context_data(**kwargs)
+        name = self.request.GET.get("name", "")
+        context["search_form"] = ProjectSearchForm(initial={"name": name})
+        return context
+
+    def get_queryset(self):
+        queryset = Project.objects.all()
+        form = ProjectSearchForm(self.request.GET)
+        if form.is_valid():
+            return queryset.filter(name__icontains=form.cleaned_data["name"])
+        return queryset
 
 
 class ProjectCreateView(LoginRequiredMixin, generic.CreateView):
@@ -165,31 +241,57 @@ class WorkerListView(generic.ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        queryset = super().get_queryset()
-        self.position = None
-        position_id = self.request.GET.get("position")
-        if position_id:
-            queryset = queryset.filter(position_id=position_id)
-            try:
-                self.position = Position.objects.get(id=position_id)
-            except Position.DoesNotExist:
-                self.position = None
+        queryset = Worker.objects.select_related("position", "team").all()
 
-        self.team = None
+        position_id = self.request.GET.get("position")
+        self.position = Position.objects.filter(id=position_id).first()\
+            if position_id else None
+        if self.position:
+            queryset = queryset.filter(position=self.position)
+
         team_id = self.request.GET.get("team")
-        if team_id:
-            queryset = queryset.filter(team_id=team_id)
-            try:
-                self.team = Team.objects.get(id=team_id)
-            except Team.DoesNotExist:
-                self.team = None
+        self.team = Team.objects.filter(id=team_id).first()\
+            if team_id else None
+        if self.team:
+            queryset = queryset.filter(team=self.team)
+
+        full_name = self.request.GET.get("full_name")
+        self.search_form = WorkerSearchForm(
+            self.request.GET or None,
+            initial={"full_name": full_name}
+        )
+        if self.search_form.is_valid():
+            query = self.search_form.cleaned_data.get("full_name")
+            if query:
+                parts = query.strip().split()
+                if len(parts) == 2:
+                    first, second = parts
+                    queryset = (
+                        queryset.filter(
+                            first_name__icontains=first,
+                            last_name__icontains=second
+                        )
+                        | queryset.filter(
+                            first_name__icontains=second,
+                            last_name__icontains=first
+                        )
+                    )
+                else:
+                    queryset = (
+                        queryset.filter(first_name__icontains=query)
+                        | queryset.filter(last_name__icontains=query)
+                    )
 
         return queryset
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["selected_position"] = self.position
-        context["selected_team"] = self.team
+        context = super(WorkerListView, self).get_context_data(**kwargs)
+        context.update({
+            "selected_position": self.position,
+            "selected_team": self.team,
+            "search_form": self.search_form,
+        })
+
         return context
 
 
@@ -248,29 +350,38 @@ class TaskListView(generic.ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        self.tag = None
-        self.task_type = None
+        queryset = (queryset.select_related("task_type")
+                    .prefetch_related("tags"))
 
         tag_id = self.request.GET.get("tags")
+        self.tag = Tag.objects.filter(id=tag_id).first() if tag_id else None
+        if self.tag:
+            queryset = queryset.filter(tags=self.tag)
+
         task_type_id = self.request.GET.get("task_type")
-        if tag_id:
-            queryset = queryset.filter(tags__id=tag_id)
-            try:
-                self.tag = Tag.objects.get(id=tag_id)
-            except Tag.DoesNotExist:
-                self.tag = None
-        if task_type_id:
-            queryset = queryset.filter(task_type_id=task_type_id)
-            try:
-                self.task_type = TaskType.objects.get(id=task_type_id)
-            except TaskType.DoesNotExist:
-                self.task_type = None
+        self.task_type = TaskType.objects.filter(id=task_type_id).first()\
+            if task_type_id else None
+        if self.task_type:
+            queryset = queryset.filter(task_type=self.task_type)
+
+        self.search_form = TaskSearchForm(
+            self.request.GET or None,
+            initial={"name": self.request.GET.get("name", "")}
+        )
+        if self.search_form.is_valid():
+            query = self.search_form.cleaned_data.get("name")
+            if query:
+                queryset = queryset.filter(name__icontains=query)
+
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["selected_tag"] = self.tag
-        context["selected_task_type"] = self.task_type
+        context.update({
+            "selected_tag": self.tag,
+            "selected_task_type": self.task_type,
+            "search_form": self.search_form,
+        })
         return context
 
 
