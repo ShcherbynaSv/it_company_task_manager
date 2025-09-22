@@ -61,7 +61,10 @@ class ModelsTests(TestCase):
         self.assertEqual(self.worker.team, self.team)
 
     def test_worker_get_absolute_url(self):
-        expected_url = reverse("tasks:worker-detail", args=[str(self.worker.id)])
+        expected_url = reverse(
+            "tasks:worker-detail",
+            args=[str(self.worker.id)]
+        )
         self.assertEqual(self.worker.get_absolute_url(), expected_url)
 
     def test_task_str(self):

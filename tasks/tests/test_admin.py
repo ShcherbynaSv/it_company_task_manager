@@ -25,7 +25,7 @@ class AdmitSiteTests(TestCase):
             username="test-user",
             password="user1234",
             position=self.position,
-            team = self.team
+            team=self.team
         )
 
         self.project = Project.objects.create(
@@ -53,7 +53,10 @@ class AdmitSiteTests(TestCase):
 
     def test_project_list_filter(self):
         model_admin = ProjectAdmin(Project, admin.site)
-        self.assertEqual(model_admin.list_filter, ["name", "created_at", "team"])
+        self.assertEqual(
+            model_admin.list_filter,
+            ["name", "created_at", "team"]
+        )
 
     def test_project_search_fields(self):
         model_admin = ProjectAdmin(Project, admin.site)
@@ -70,7 +73,14 @@ class AdmitSiteTests(TestCase):
         model_admin = WorkerAdmin(Worker, admin.site)
         self.assertEqual(
             model_admin.list_filter,
-            ("is_staff", "is_superuser", "is_active", "groups", "position", "team")
+            (
+                "is_staff",
+                "is_superuser",
+                "is_active",
+                "groups",
+                "position",
+                "team"
+            )
         )
 
     def test_worker_fieldsets_contains_additional_info(self):
@@ -94,10 +104,18 @@ class AdmitSiteTests(TestCase):
         res = self.client.get(url)
 
         self.assertContains(res, self.task.name)
-        self.assertContains(res, date_format(self.task.created_at, "DATETIME_FORMAT"))
-        self.assertContains(res, date_format(self.task.deadline, "DATETIME_FORMAT"))
+        self.assertContains(
+            res,
+            date_format(self.task.created_at, "DATETIME_FORMAT")
+        )
+        self.assertContains(
+            res,
+            date_format(self.task.deadline, "DATETIME_FORMAT")
+        )
         self.assertContains(res, str(self.task.project))
-        expected_icon = 'alt="True"' if self.task.is_completed else 'alt="False"'
+        expected_icon = 'alt="True"' \
+            if self.task.is_completed \
+            else 'alt="False"'
         self.assertContains(res, expected_icon)
         self.assertContains(res, self.task.get_priority_display())
         self.assertContains(res, str(self.task.task_type))
