@@ -1,5 +1,4 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.handlers.modwsgi import check_password
 from django.test import TestCase
 from django.urls import reverse
 
