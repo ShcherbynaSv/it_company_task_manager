@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
+from django.utils import timezone
+from datetime import timedelta
 
 from tasks.models import Position, Team, TaskType, Tag, Project, Task
 
@@ -25,7 +27,7 @@ class ModelsTests(TestCase):
         self.task = Task.objects.create(
             name="test-task",
             description="test-description",
-            deadline="2025-09-25",
+            deadline=timezone.now() + timedelta(days=7),
             task_type=self.task_type,
             project=self.project,
         )
