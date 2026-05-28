@@ -29,7 +29,8 @@ def index(request: HttpRequest) -> HttpResponse:
         "positions": Position.objects.all().count(),
         "workers": Worker.objects.all().count()
     }
-    return render(request, "tasks/index.html", context=context)
+    return render(request, "tasks/about_us.html", context=context)
+    # return render(request, "tasks/index.html", context=context)
 
 
 class PositionListView(generic.ListView):
