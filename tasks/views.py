@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 
-from .forms import (
+from tasks.forms import (
     WorkerCreationForm,
     WorkerUpdateForm,
     TaskForm,
@@ -16,7 +16,7 @@ from .forms import (
     WorkerSearchForm,
     TaskSearchForm
 )
-from .models import Tag, Task, TaskType, Team, Project, Position, Worker
+from tasks.models import Tag, Task, TaskType, Team, Project, Position, Worker
 
 
 def index(request: HttpRequest) -> HttpResponse:
