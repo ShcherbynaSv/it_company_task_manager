@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+  <h1>Teams List<a style="float: right;" class="btn btn-primary" href="{% url 'tasks:team-create' %}"><b>+</b></a></h1>
+  <form class="form-inline" method="get" action="">
+    {{ search_form|crispy }}
+    <input class="btn btn-secondary" type="submit" value="🔍">
+  </form>
+  <br>
+  {% if team_list %}
+    <table class="table">
+      <tr>
+        <th>Team name</th>
+        <th>UPDATE</th>
+        <th>DELETE</th>
+      </tr>
+      {% for team in team_list %}
+        <tr>
+          <td>
+            <a href="{% url 'tasks:worker-list' %}?team={{ team.id }}">
+              {{ team.name }}
+            </a>
+          </td>
+          <td>
+            <a href="{% url 'tasks:team-update' team.id %}">UPDATE</a>
+          </td>
+          <td>
+            <a href="{% url 'tasks:team-delete' team.id %}">DELETE</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p>There are no teams</p>
+  {% endif %}
+{% endblock %}

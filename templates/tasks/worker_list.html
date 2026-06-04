@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+  <h1>
+    Workers List
+    <a style="float: right;" class="btn btn-primary" href="{% url 'tasks:worker-create' %}"><b>+</b></a>
+  </h1>
+
+  {% if selected_position %}
+    <p>Filtered by position: <strong>{{ selected_position.name }}</strong></p>
+    <p>
+      <a href="{% url 'tasks:worker-list' %}?full_name={{ request.GET.full_name }}">
+        Clear filter
+      </a>
+    </p>
+  {% endif %}
+
+  {% if selected_team %}
+    <p>Filtered by team: <strong>{{ selected_team.name }}</strong></p>
+    <p>
+      <a href="{% url 'tasks:worker-list' %}?full_name={{ request.GET.full_name }}">
+        Clear filter
+      </a>
+    </p>
+  {% endif %}
+
+  <form class="form-inline" method="get" action="">
+    {% if selected_position %}
+      <input type="hidden" name="position" value="{{ selected_position.id }}">
+    {% endif %}
+    {% if selected_team %}
+      <input type="hidden" name="team" value="{{ selected_team.id }}">
+    {% endif %}
+
+    {{ search_form|crispy }}
+    <input class="btn btn-secondary" type="submit" value="🔍">
+</form>
+  <br>
+
+  {% if worker_list %}
+    <ul>
+      {% for worker in worker_list %}
+        <li>
+          <a href="{{ worker.get_absolute_url }}">
+          {{ worker.first_name }} {{ worker.last_name }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>There are no workers</p>
+  {% endif %}
+{% endblock %}

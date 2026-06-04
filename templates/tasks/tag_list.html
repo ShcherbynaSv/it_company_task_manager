@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+  <h1>
+    Tags List
+    <a style="float: right;" class="btn btn-primary" href="{% url 'tasks:tag-create' %}"><b>+</b></a>
+  </h1>
+  <form class="form-inline" method="get" action="">
+    {{ search_form|crispy }}
+    <input class="btn btn-secondary" type="submit" value="🔍">
+  </form>
+  <br>
+  {% if tag_list %}
+    <table class="table">
+      <tr>
+        <th>Tag name</th>
+        <th>UPDATE</th>
+        <th>DELETE</th>
+      </tr>
+      {% for tag in tag_list %}
+        <tr>
+          <td>
+            <a href="{% url 'tasks:task-list' %}?tags={{ tag.id }}">
+              {{ tag.name }}
+            </a>
+          </td>
+          <td>
+            <a href="{% url 'tasks:tag-update' tag.id %}">UPDATE</a>
+          </td>
+          <td>
+            <a href="{% url 'tasks:tag-delete' tag.id %}">DELETE</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p>There are no tags</p>
+  {% endif %}
+{% endblock %}

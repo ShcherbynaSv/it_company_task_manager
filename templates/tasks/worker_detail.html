@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>{{ object.first_name }} {{ object.last_name }}</h1>
+  <a class="btn btn-secondary" href="{% url 'tasks:worker-update' object.id %}">Edit worker information</a>
+  <a class="btn btn-danger" href="{% url 'tasks:worker-delete' object.id %}">Delete worker</a>
+  <hr>
+  {% if object.email %}
+    <p><strong>E-mail: </strong> {{ object.email }}</p>
+  {% else %}
+    <p>There are no information about the worker's e-mail.</p>
+  {% endif %}
+
+<table class="table">
+    <tr>
+      <th>Completed tasks</th>
+      <th>Tasks in progress</th>
+    </tr>
+    <tr>
+      <td>
+        {% for task in completed_tasks %}
+          <p><a href="{% url 'tasks:task-detail' task.id %}">{{ task.name }}</a></p>
+        {% empty %}
+          <p>There are no completed tasks yet.</p>
+        {% endfor %}
+      </td>
+      <td>
+        {% for task in tasks_in_progress %}
+          <p><a href="{% url 'tasks:task-detail' task.id %}">{{ task.name }}</a></p>
+        {% empty %}
+          <p>There are no tasks in progress.</p>
+        {% endfor %}
+      </td>
+    </tr>
+  </table>
+{% endblock %}

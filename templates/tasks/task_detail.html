@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>
+    {{ object.name }}
+    <a class="btn btn-secondary" href="{% url 'tasks:task-update' object.id %}">Edit task</a>
+    <a class="btn btn-danger" href="{% url 'tasks:task-delete' object.id %}">Delete task</a>
+  </h1>
+  <hr>
+  <p><strong>Creation date: </strong> {{ object.created_at }}</p>
+  <p><strong>Deadline: </strong> {{ object.deadline }}</p>
+  <p><strong>Is completed: </strong> {{ object.is_completed }}</p>
+  <p><strong>Priority: </strong> {{ object.priority }}</p>
+  <p><strong>Task type: </strong> {{ object.task_type }}</p>
+  <p><strong>Project: </strong> {{ object.project }}</p>
+  <p><strong>Description:</strong></p>
+  <p>{{ object.description }}</p>
+  <table class="table">
+    <tr>
+      <th>Assignees</th>
+      <th>Tags</th>
+    </tr>
+    <tr>
+      <td>
+        {% for worker in object.assignees.all %}
+          <p><a href="{{ worker.get_absolute_url }}">{{ worker.first_name }} {{ worker.last_name }}</a></p>
+        {% endfor %}
+      </td>
+      <td>
+        {% for tag in object.tags.all %}
+          <p><a href="{% url 'tasks:task-list' %}?tags={{ tag.id }}">{{ tag.name }}</a></p>
+        {% endfor %}
+      </td>
+    </tr>
+  </table>
+{% endblock %}
