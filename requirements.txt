@@ -55,7 +55,7 @@ python-dotenv==1.2.2
 pytz==2025.2
 pyzmq==27.1.0
 requests==2.32.5
-scipy==1.17.0
+scipy==1.13.1
 six==1.17.0
 smart_open==7.5.0
 sqlparse==0.5.3
