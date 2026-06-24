@@ -2,3 +2,55 @@
   padding: 0;
   list-style: none;
 }
+
+body {
+    background: #f8fbff;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Big blue circle */
+.background-shape {
+    position: fixed;
+    top: -180px;
+    right: -180px;
+    width: 950px;
+    height: 950px;
+    background: rgba(13, 110, 253, 0.14);
+    border-radius: 50%;
+    z-index: -1;
+}
+
+/* Second smaller circle */
+.background-shape::after {
+    content: "";
+    position: absolute;
+    width: 420px;
+    height: 420px;
+    left: -350px;
+    bottom: -150px;
+    background: rgba(13, 110, 253, 0.16);
+    border-radius: 50%;
+}
+
+.badge {
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+}
+
+.card h5 {
+    font-weight: 600;
+}
+
+.card {
+    border-radius: 15px;
+}
+
+.alert {
+    border-radius: 12px;
+}
+
+.btn {
+    border-radius: 10px;
+}

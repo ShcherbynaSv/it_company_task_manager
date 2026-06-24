@@ -2,22 +2,40 @@
 {% load crispy_forms_filters %}
 
 {% block content %}
-  <h1>
-    Projects List
-    <a style="float: right;" class="btn btn-primary" href="{% url 'tasks:project-create' %}"><b>+</b></a>
-  </h1>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="display-6 font-weight-bold">Pojects</h1>
+          </div>
 
+    <a class="btn btn-primary" href="{% url 'tasks:project-create' %}">
+      + Create Project
+    </a>
+  </div>
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <form method="get">
+        {{ search_form|crispy }}
+        <button class="btn btn-secondary">
+          Search
+        </button>
+      </form>
+    </div>
+  </div>
+  <br>
   {% if project_list %}
-    <ul>
-      {% for project in project_list %}
-        <li>
-          <a href="{{ project.get_absolute_url }}">
-            {{ project.name }}
-          </a>
-        </li>
-      {% endfor %}
-    </ul>
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <ul>
+          {% for project in project_list %}
+            <li>
+              <a href="{{ project.get_absolute_url }}">
+                {{ project.name }}
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
   {% else %}
-    <p>There are no projects</p>
+    <p>There are no projects yet</p>
   {% endif %}
 {% endblock %}

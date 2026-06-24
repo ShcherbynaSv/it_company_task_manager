@@ -2,36 +2,64 @@
 {% load crispy_forms_filters %}
 
 {% block content %}
-  <h1>Teams List<a style="float: right;" class="btn btn-primary" href="{% url 'tasks:team-create' %}"><b>+</b></a></h1>
-  <form class="form-inline" method="get" action="">
-    {{ search_form|crispy }}
-    <input class="btn btn-secondary" type="submit" value="🔍">
-  </form>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="display-6 font-weight-bold">Teams</h1>
+          </div>
+
+    <a class="btn btn-primary" href="{% url 'tasks:team-create' %}">
+      + Create Team
+    </a>
+  </div>
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <form method="get">
+        {{ search_form|crispy }}
+        <button class="btn btn-secondary">
+          Search
+        </button>
+      </form>
+    </div>
+  </div>
   <br>
   {% if team_list %}
-    <table class="table">
-      <tr>
-        <th>Team name</th>
-        <th>UPDATE</th>
-        <th>DELETE</th>
-      </tr>
-      {% for team in team_list %}
-        <tr>
-          <td>
-            <a href="{% url 'tasks:worker-list' %}?team={{ team.id }}">
-              {{ team.name }}
-            </a>
-          </td>
-          <td>
-            <a href="{% url 'tasks:team-update' team.id %}">UPDATE</a>
-          </td>
-          <td>
-            <a href="{% url 'tasks:team-delete' team.id %}">DELETE</a>
-          </td>
-        </tr>
-      {% endfor %}
-    </table>
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <table class="table">
+          <tr>
+            <th>Team name</th>
+            <th>EDIT</th>
+            <th>DELETE</th>
+          </tr>
+          {% for team in team_list %}
+            <tr>
+              <td>
+                <a href="{% url 'tasks:worker-list' %}?team={{ team.id }}">
+                  {{ team.name }}
+                </a>
+              </td>
+              <td>
+                <a
+                    class="btn btn-sm btn-outline-warning"
+                    href="{% url 'tasks:team-update' team.id %}"
+                >
+                  Edit
+                </a>
+              </td>
+              <td>
+                <a
+                    class="btn btn-sm btn-outline-danger"
+                    href="{% url 'tasks:team-delete' team.id %}"
+                >
+                  Delete
+                </a>
+              </td>
+            </tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
   {% else %}
-    <p>There are no teams</p>
+    <p>There are no teams yet</p>
   {% endif %}
 {% endblock %}

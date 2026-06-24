@@ -2,51 +2,116 @@
 {% load crispy_forms_filters %}
 
 {% block content %}
-  <h1>
-    Tasks List
-    <a style="float: right;" class="btn btn-primary" href="{% url 'tasks:task-create' %}"><b>+</b></a>
-  </h1>
 
-  {% if selected_tag %}
-    <p>Filtered by tag: <strong>{{ selected_tag.name }}</strong></p>
-    <p>
-      <a href="{% url 'tasks:task-list' %}?name={{ request.GET.name }}">
-        Clear filter
-      </a>
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h1 class="display-6 font-weight-bold">Tasks</h1>
+    <p class="text-muted mb-0">
+      Manage company tasks and track their progress.
     </p>
-  {% endif %}
+  </div>
 
-  {% if selected_task_type %}
-    <p>Filtered by task type: <strong>{{ selected_task_type.name }}</strong></p>
-    <p>
-      <a href="{% url 'tasks:task-list' %}?name={{ request.GET.name }}">
-        Clear filter
+  <a class="btn btn-primary" href="{% url 'tasks:task-create' %}">
+    + Create Task
+  </a>
+</div>
+
+
+{% if selected_tag %}
+<div class="alert alert-primary">
+  Filtered by tag:
+  <strong>{{ selected_tag.name }}</strong>
+  <a class="ml-3" href="{% url 'tasks:task-list' %}">
+    Clear filter
+  </a>
+</div>
+{% endif %}
+
+
+{% if selected_task_type %}
+<div class="alert alert-primary">
+  Filtered by task type:
+  <strong>{{ selected_task_type.name }}</strong>
+  <a class="ml-3" href="{% url 'tasks:task-list' %}">
+    Clear filter
+  </a>
+</div>
+{% endif %}
+
+
+<div class="card shadow-sm mb-4">
+  <div class="card-body">
+
+    <form method="get">
+
+      {% if selected_tag %}
+        <input type="hidden" name="tags" value="{{ selected_tag.id }}">
+      {% endif %}
+
+      {% if selected_task_type %}
+        <input type="hidden" name="task_type" value="{{ selected_task_type.id }}">
+      {% endif %}
+
+      {{ search_form|crispy }}
+
+      <button class="btn btn-secondary">
+        Search
+      </button>
+
+    </form>
+
+  </div>
+</div>
+
+
+{% if task_list %}
+
+<div class="row">
+
+{% for task in task_list %}
+
+<div class="col-md-6 mb-3">
+
+  <div class="card shadow-sm h-100">
+
+    <div class="card-body">
+
+      <h5 class="card-title">
+        {{ task.name }}
+      </h5>
+
+
+      {% if task.description %}
+      <p class="text-muted">
+        {{ task.description|truncatewords:20 }}
+      </p>
+      {% endif %}
+
+
+      <a class="btn btn-sm btn-primary"
+         href="{{ task.get_absolute_url }}">
+        View Task
       </a>
-    </p>
-  {% endif %}
 
-  <form class="form-inline" method="get" action="">
-    {% if selected_tag %}
-      <input type="hidden" name="tags" value="{{ selected_tag.id }}">
-    {% endif %}
-    {% if selected_task_type %}
-      <input type="hidden" name="task_type" value="{{ selected_task_type.id }}">
-    {% endif %}
+    </div>
 
-    {{ search_form|crispy }}
-    <input class="btn btn-secondary" type="submit" value="🔍">
-</form>
-  <br>
+  </div>
 
-  {% if task_list %}
-    <ul>
-      {% for task in task_list %}
-        <li>
-          <a href="{{ task.get_absolute_url }}">{{ task.name }}</a>
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>There are no tasks</p>
-  {% endif %}
+</div>
+
+{% endfor %}
+
+</div>
+
+
+{% else %}
+
+<div class="card shadow-sm">
+  <div class="card-body text-center text-muted">
+    There are no tasks
+  </div>
+</div>
+
+{% endif %}
+
 {% endblock %}
